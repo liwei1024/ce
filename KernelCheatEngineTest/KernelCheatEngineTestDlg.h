@@ -40,4 +40,18 @@ public:
 	afx_msg void OnBnClickedButton5();
 	CEdit edit1;
 	CEdit edit3;
+	afx_msg void OnBnClickedButton6();
+	CEdit edit_address;
+	CEdit edit_byte;
+	CEdit edit_short;
+	CEdit edit_integer;
+	CEdit edit_long;
+	CEdit edit_float;
+	CEdit edit_double;
+	CEdit edit_string;
+	CEdit edit_string_length;
+	CEdit edit_wstring;
+	CEdit edit_wstring_length;
+	CEdit edit_bytes;
+	CEdit edit_bytes_length;
 };

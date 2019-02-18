@@ -1,5 +1,8 @@
 #pragma once
 
+#define DEVICE_NAME L"\\Device\\" L"kce"
+#define SYMBOLIC_LINK_SHORT_NAME L"kce"
+#define SYMBOLIC_LINK_NAME (L"\\DosDevices\\" SYMBOLIC_LINK_SHORT_NAME)
 
 #define KCTL_CODE(x) CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800 + x, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 

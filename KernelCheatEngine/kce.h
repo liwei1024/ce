@@ -7,9 +7,7 @@
 #define dprintf(Format, ...) DbgPrint("KCA: " Format "\n", __VA_ARGS__)
 #endif // DEBUG
 
-#define DEVICE_NAME L"\\Device\\" L"kce"
-#define SYMBOLIC_LINK_SHORT_NAME L"kce"
-#define SYMBOLIC_LINK_NAME (L"\\DosDevices\\" SYMBOLIC_LINK_SHORT_NAME)
+
 
 typedef struct _TARGET_PROCESS_INFO
 {

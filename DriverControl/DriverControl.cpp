@@ -56,6 +56,7 @@ BOOL DriverControl::start()
 	if (!::StartService(schService, 0, NULL)) 
 	{
 		wsprintfW(returnMessage, L"StartService Failure  Error Code - <%d>", ::GetLastError());
+		::CloseServiceHandle(schService);
 		::CloseServiceHandle(schSCManager);
 		schSCManager = NULL;
 		return FALSE;
@@ -69,6 +70,7 @@ BOOL DriverControl::stop()
 	if (!::ControlService(schService, SERVICE_CONTROL_STOP, &ss))
 	{
 		wsprintfW(returnMessage, L"StopService Failure  Error Code - <%d>", ::GetLastError());
+		::CloseServiceHandle(schService);
 		::CloseServiceHandle(schSCManager);
 		schSCManager = NULL;
 		return FALSE;
@@ -79,24 +81,18 @@ BOOL DriverControl::stop()
 
 BOOL DriverControl::unload()
 {
-	if (!::ControlService(schService, SERVICE_CONTROL_STOP, &ss))
-	{
-		wsprintfW(returnMessage, L"StopService Failure  Error Code - <%d>", ::GetLastError());
-		::CloseServiceHandle(schSCManager);
-		schSCManager = NULL;
-		return FALSE;
-	}
-	if (!::DeleteService(schService))
+	BOOL result = ::DeleteService(schService);
+	if (!result)
 	{
 		wsprintfW(returnMessage, L"DeleteService Failure  Error Code - <%d>", ::GetLastError());
-		::CloseServiceHandle(schSCManager);
-		schSCManager = NULL;
-		return FALSE;
+	}
+	else {
+		wsprintfW(returnMessage, L"%s", L"卸载成功");
 	}
 	::CloseServiceHandle(schService);
 	::CloseServiceHandle(schSCManager);
-	wsprintfW(returnMessage, L"%s", L"卸载成功");
-	return TRUE;
+	schSCManager = NULL;
+	return result;
 }
 
 BOOL DriverControl::control(LPCWSTR SymbolicLinkName, DWORD IoControlCode,

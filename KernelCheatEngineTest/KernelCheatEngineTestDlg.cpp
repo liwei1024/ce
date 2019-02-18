@@ -3,9 +3,11 @@
 //
 
 #include "stdafx.h"
+#include "winioctl.h"
 #include "KernelCheatEngineTest.h"
 #include "KernelCheatEngineTestDlg.h"
 #include "afxdialogex.h"
+#include "../KernelCheatEngine/kce_api.h"
 
 #include "../DriverControl/DriverControl.h"
 #pragma comment(lib,"DriverControl.lib")
@@ -66,6 +68,19 @@ void CKernelCheatEngineTestDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT2, edit2);
 	DDX_Control(pDX, IDC_EDIT1, edit1);
 	DDX_Control(pDX, IDC_EDIT3, edit3);
+	DDX_Control(pDX, IDC_EDIT5, edit_address);
+	DDX_Control(pDX, IDC_EDIT6, edit_byte);
+	DDX_Control(pDX, IDC_EDIT7, edit_short);
+	DDX_Control(pDX, IDC_EDIT8, edit_integer);
+	DDX_Control(pDX, IDC_EDIT9, edit_long);
+	DDX_Control(pDX, IDC_EDIT10, edit_float);
+	DDX_Control(pDX, IDC_EDIT11, edit_double);
+	DDX_Control(pDX, IDC_EDIT12, edit_string);
+	DDX_Control(pDX, IDC_EDIT15, edit_string_length);
+	DDX_Control(pDX, IDC_EDIT13, edit_wstring);
+	DDX_Control(pDX, IDC_EDIT16, edit_wstring_length);
+	DDX_Control(pDX, IDC_EDIT14, edit_bytes);
+	DDX_Control(pDX, IDC_EDIT17, edit_bytes_length);
 }
 
 BEGIN_MESSAGE_MAP(CKernelCheatEngineTestDlg, CDialogEx)
@@ -77,6 +92,7 @@ BEGIN_MESSAGE_MAP(CKernelCheatEngineTestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CKernelCheatEngineTestDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CKernelCheatEngineTestDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CKernelCheatEngineTestDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CKernelCheatEngineTestDlg::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 
@@ -223,4 +239,49 @@ void CKernelCheatEngineTestDlg::OnBnClickedButton5()
 	// TODO: 在此添加控件通知处理程序代码
 	drictl.unload();
 	edit1.SetWindowTextW(drictl.getMessage());
+}
+
+//读内存
+void CKernelCheatEngineTestDlg::OnBnClickedButton6()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString str;
+	CString address_str;
+	edit_address.GetWindowTextW(address_str);
+
+	byte m_byte;
+	short m_short;
+	int m_int;
+	LONGLONG m_long;
+
+	KCE_READ_VIRTUAL_MEMORY_STRUCT rvms;
+
+	rvms.Response = &m_byte;
+	rvms.Address = _wtoi(address_str);
+	rvms.Size = sizeof(m_byte);
+	drictl.control(L"\\\\.\\" SYMBOLIC_LINK_SHORT_NAME, KCE_READ_VIRTUAL_MEMORY, &rvms, sizeof(rvms), &rvms, sizeof(rvms));
+	str.Format(L"%d", m_byte);
+	edit_byte.SetWindowTextW(str);
+
+	rvms.Response = &m_short;
+	rvms.Address = _wtoi(address_str);
+	rvms.Size = sizeof(m_short);
+	drictl.control(L"\\\\.\\" SYMBOLIC_LINK_SHORT_NAME, KCE_READ_VIRTUAL_MEMORY, &rvms, sizeof(rvms), &rvms, sizeof(rvms));
+	str.Format(L"%d", m_short);
+	edit_short.SetWindowTextW(str);
+
+	rvms.Response = &m_int;
+	rvms.Address = _wtoi(address_str);
+	rvms.Size = sizeof(m_int);
+	drictl.control(L"\\\\.\\" SYMBOLIC_LINK_SHORT_NAME, KCE_READ_VIRTUAL_MEMORY, &rvms, sizeof(rvms), &rvms, sizeof(rvms));
+	str.Format(L"%d", m_int);
+	edit_integer.SetWindowTextW(str);
+
+	rvms.Response = &m_long;
+	rvms.Address = _wtoi(address_str);
+	rvms.Size = sizeof(m_long);
+	drictl.control(L"\\\\.\\" SYMBOLIC_LINK_SHORT_NAME, KCE_READ_VIRTUAL_MEMORY, &rvms, sizeof(rvms), &rvms, sizeof(rvms));
+	str.Format(L"%d", m_long);
+	edit_long.SetWindowTextW(str);
+
 }
